@@ -144,7 +144,7 @@ for i in orderbook_usdt_df:
     orderbook_usdt_asks_list.append(a)
 
     
-# what happen to every coin after putting 50k $ immadiatelely
+# what happens to every coin after putting 50k $ immadiatelely
 
 final_list = []
 for i in orderbook_usdt_asks_list:
