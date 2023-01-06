@@ -5,7 +5,6 @@
 pip install kucoin-python  
 
 #Library import
-
 from kucoin.market import market
 import os
 import pandas as pd
@@ -14,21 +13,17 @@ api_key = 'key'
 api_secret = 'secret'
 api_passphrase = 'passphrase'
 
-
-market = market.MarketData(key = api_key, secret = api_secret, passphrase = api_passphrase)   # API
+# API
+market = market.MarketData(key = api_key, secret = api_secret, passphrase = api_passphrase)   
 
 
 # At the begining im gonna try to do it with a single coin
-
-
 order_book = market.get_aggregated_orderv3('BTC-USDT')  # API documentation
 order_book.keys()
-
 type(order_book)
 
 # 'asks' are neccessary for further operation
 ask_btc = order_book['asks']
-
 ask_btc[:5]
 type(ask_btc)
 type(ask_btc[0][1])
@@ -51,7 +46,6 @@ type(btc_df['sum'][0])
 
 #change to list for faster calculations
 btc_list = btc_df.values.tolist() 
-
 btc_list[:5]
 len(btc_list)
 
@@ -72,13 +66,17 @@ print(result)
 
 ####### Now I'm gonna do the same operation for rest coins 
 
+#API
 from kucoin.client import Market
 
-client = Market(url='https://api.kucoin.com')  # API documentation
+# API documentation
+client = Market(url='https://api.kucoin.com')  
 
-#all tickers for make a list with USDT tickers
+#all tickers for make a list with only USDT tickers
 
-tickers = client.get_all_tickers()  #API doccumentation
+#API doccumentation
+tickers = client.get_all_tickers()  
+
 tickers.keys()
 tickers = pd.DataFrame(tickers['ticker'])
 tickers.head()
@@ -103,28 +101,28 @@ len(usdt_tickers)
 # getting data of all USDT tickers
 orderbook_usdt = []
 for i in usdt_tickers:
-    orderbook_usdt.append(market.get_aggregated_orderv3(i))
-
+    orderbook_usdt.append(market.get_aggregated_orderv3(i))   
+# sometimes there can be a problem with download all orderbooks - we receive an information 'Too many requests'. 
+# This is due to overload of Kucoin servers. In the future I will try to avoid this error with slowing down the program.
+    
+    
 len(orderbook_usdt)
 orderbook_usdt = orderbook_usdt[:-1]
 len(orderbook_usdt)
 orderbook_usdt[:1]
 
 # only asks - we are not interested in bids 
-
 orderbook_usdt_asks = []
 for i in orderbook_usdt:
        orderbook_usdt_asks.append(i['asks'])
 
 # convert every single orderbook to seperated df
-
 orderbook_usdt_df = []
 for i in orderbook_usdt_asks:
     a = pd.DataFrame(i, columns = ['price','amount'])
     orderbook_usdt_df.append(a)
 
 # whole strings to floats for create 'sum' column
-
 for i in orderbook_usdt_df:
     i['price'] = i['price'].astype(float)
     i['amount'] = i['amount'].astype(float)
@@ -132,12 +130,10 @@ for i in orderbook_usdt_df:
 type(orderbook_usdt_df[0]['price'][0])
 
 #adding column 'sum' to every coins df
-
 for i in orderbook_usdt_df:
     i['sum'] = i['price']*i['amount']
 
 # moving back all to list  
-
 orderbook_usdt_asks_list = []
 for i in orderbook_usdt_df:
     a = i.values.tolist()
@@ -145,7 +141,6 @@ for i in orderbook_usdt_df:
 
     
 # what happens to every coin after putting 50k $ immadiatelely
-
 final_list = []
 for i in orderbook_usdt_asks_list:
     cash = 50000
