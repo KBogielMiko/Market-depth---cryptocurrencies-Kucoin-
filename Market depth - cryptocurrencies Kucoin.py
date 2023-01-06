@@ -1,9 +1,5 @@
 '''Market depth - cryptocurrencies (KuCoin)'''
 
-#Neccessary library for API commands
-
-pip install kucoin-python  
-
 #Library import
 from kucoin.market import market
 import os
@@ -17,12 +13,12 @@ api_passphrase = 'passphrase'
 market = market.MarketData(key = api_key, secret = api_secret, passphrase = api_passphrase)   
 
 
-# At the begining im gonna try to do it with a single coin
+# At the begining i'm going to try do it with a single coin
 order_book = market.get_aggregated_orderv3('BTC-USDT')  # API documentation
 order_book.keys()
 type(order_book)
 
-# 'asks' are neccessary for further operation
+# 'asks' (ask prices) are neccessary for further operation
 ask_btc = order_book['asks']
 ask_btc[:5]
 type(ask_btc)
